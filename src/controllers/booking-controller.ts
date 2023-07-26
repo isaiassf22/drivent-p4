@@ -1,38 +1,43 @@
+import { AuthenticatedRequest } from "@/middlewares";
 import bookingService from "@/services/booking-service";
-import { NextFunction, Request, Response } from "express";
+import {  Response } from "express";
 import httpStatus from "http-status";
 
 
-async function checkBook(req: Request, res: Response, next: NextFunction) {
-    const id = Number(req.params.id)
+async function checkBook(req: AuthenticatedRequest, res: Response) {
+
     try {
-        const check = await bookingService.checkBook(id)
+        const { userId } = req
+        const check = await bookingService.checkBook(userId)
         return res.sendStatus(httpStatus.OK)
     } catch (err) {
-        next(err)
+        throw new Error("something went wrong")
     }
 }
 
-async function postBook(req: Request, res: Response, next: NextFunction) {
-    const id = Number(req.params.id)
-    const  roomId  = Number(req.body)
+async function postBook(req: AuthenticatedRequest, res: Response) {
+    const {userId} = req
+    const {roomId} = req.body
     try {
-        const postNewBooking = await bookingService.postBook(id,roomId)
+        const postNewBooking = await bookingService.postBook(userId, roomId)
         return res.sendStatus(httpStatus.OK)
     } catch (err) {
+        throw new Error("something went wrong")
 
-        next(err)
+
     }
 }
 
-async function bookUpdate(req: Request, res: Response, next: NextFunction) {
-    const id = parseInt(req.params.id)
-    const roomId =parseInt(req.body)
+async function bookUpdate(req: AuthenticatedRequest, res: Response) {
+    const {userId} = req
+    const {roomId} = req.body
+
+    
     try {
-        await bookingService.bookUpdate(id,roomId)
+        await bookingService.bookUpdate(userId, roomId)
         res.sendStatus(httpStatus.OK)
     } catch (err) {
-        next(err)
+        throw new Error("something went wrong")
     }
 }
 
