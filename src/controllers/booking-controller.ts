@@ -9,7 +9,10 @@ async function checkBook(req: AuthenticatedRequest, res: Response) {
     try {
         const { userId } = req
         const check = await bookingService.checkBook(userId)
-        return res.sendStatus(httpStatus.OK)
+        return res.status(httpStatus.OK).send({
+            id: check.id,
+            Room: check.Room,
+          });
     } catch (err) {
         throw new Error("something went wrong")
     }

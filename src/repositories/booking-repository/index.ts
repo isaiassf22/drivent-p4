@@ -16,6 +16,8 @@ import { prisma } from "@/config";
 
  }
  async function postBook(roomId:number,userId:number) {
+
+
         return prisma.booking.create({
             data: {
               roomId,

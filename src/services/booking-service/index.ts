@@ -14,8 +14,14 @@ async function checkBook(userId: number) {
 async function postBook(userId: number,roomId:number) {
 
     if(!roomId) return httpStatus.BAD_REQUEST
-    const post= await bookingRepository.postBook( userId, roomId );
+    const verify = await bookingRepository.checkUserBook(userId)
+    console.log(verify)
+    if(!verify){
+         const post= await bookingRepository.postBook( userId, roomId );
     return post
+    }
+
+   return undefined
 }
 
 
